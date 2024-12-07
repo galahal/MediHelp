@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useReducer } from 'react'
 import { getAll } from '../../services/medicineService';
+import Thumbnails from '../../components/Thumbnails/Thumbnails.jsx';
 
-const initialState = { foods: [] };
+const initialState = { medicines: [] };
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -20,5 +23,8 @@ export default function HomePage() {
     getAll().then(medicines => dispatch({ type: 'MEDICINES_LOADED', payload: medicines}));
   }, []);
 
-  return <div>HomePage</div>;
+  return (<>
+    <Thumbnails medicines={medicines} />
+  </>
+  );
 }
