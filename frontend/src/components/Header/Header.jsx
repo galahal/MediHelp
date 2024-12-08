@@ -35,7 +35,7 @@ const Header = () => {
                   <Link to="/orders">Orders</Link> */}
                   <a onClick={logout}>Logout</a>
                   <Link to="/dashboard">Profile</Link>
-                  
+                  <Link to="/register">Reg</Link>
 
                 </div>
               </li>
