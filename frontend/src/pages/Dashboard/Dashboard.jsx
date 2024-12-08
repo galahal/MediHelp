@@ -1,63 +1,40 @@
-import React from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import classes from './dashboard.module.css';
+import React from 'react'
+import classes from "./dashboard.module.css";
+
 export default function Dashboard() {
-  const { user } = useAuth();
+  const user = {
+    name: "Faiyaz",
+    role: "Admin", // Role can be "Admin", "Pharmacist", or "User"
+    photo: "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png", // URL to user's photo
+  };
   return (
-    <div className={classes.container}>
-      <div className={classes.menu}>
-        {allItems
-          .filter(item => user.isAdmin || !item.forAdmin)
-          .map(item => (
-            <Link
-              key={item.title}
-              to={item.url}
-              style={{
-                backgroundColor: item.bgColor,
-                color: item.color,
-              }}
-            >
-              <img src={item.imageUrl} alt={item.title} />
-              <h2>{item.title}</h2>
-            </Link>
-          ))}
+    <div className={classes.dashboard}>
+      <div className={classes.userInfo}>
+        {/* User Photo */}
+        <img
+          src={user.photo}
+          alt={`${user.name}'s profile`}
+          className={classes.userPhoto}
+        />
+        <div className={classes.userDetails}>
+          {/* Username */}
+          <h2 className={classes.userName}>{user.name}</h2>
+          {/* User Role */}
+          <p className={classes.userRole}>
+            {user.role === "Admin" && "👑 Admin"}
+            {user.role === "Pharmacist" && "💊 Pharmacist"}
+            {user.role === "Doctor" && "🙋 Doctor"}
+          </p>
+        </div>
+      </div>
+      {/* Additional dashboard content */}
+      <div className={classes.dashboardContent}>
+        <h3>Welcome to your dashboard!</h3>
+        {/* Add more content here */}
       </div>
     </div>
-  );
-}
-
-const allItems = [
-  {
-    title: 'Orders',
-    imageUrl: '/icons/orders.svg',
-    url: '/orders',
-    bgColor: '#ec407a',
-    color: 'white',
-  },
-  {
-    title: 'Profile',
-    imageUrl: '/icons/profile.svg',
-    url: '/profile',
-    bgColor: '#1565c0',
-    color: 'white',
-  },
-  // {
-  //   title: 'Users',
-  //   imageUrl: '/icons/users.svg',
-  //   url: '/admin/users',
-  //   forAdmin: true,
-  //   bgColor: '#00bfa5',
-  //   color: 'white',
-  // },
-  // {
-  //   title: 'Foods',
-  //   imageUrl: '/icons/foods.svg',
-  //   url: '/admin/foods',
-  //   forAdmin: true,
-  //   bgColor: '#e040fb',
-  //   color: 'white',
-  // },
-];
+  // );
+// };
     // <div>Dashboard</div>
-  // )
-// }
+  )
+}

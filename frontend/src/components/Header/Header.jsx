@@ -9,6 +9,14 @@ const Header = () => {
   const logout = () => {
     console.log("Logout clicked!");
   };
+  const dashboard = () =>{
+    return(
+      <div>
+        <h1>Dashboard</h1>
+        <p>Welcome to your dashboard</p>
+      </div>
+    )
+  }
 
   return (
     <header className={classes.header}>
@@ -26,6 +34,9 @@ const Header = () => {
                   {/* <Link to="/profile">Profile</Link>
                   <Link to="/orders">Orders</Link> */}
                   <a onClick={logout}>Logout</a>
+                  <Link to="/dashboard">Profile</Link>
+                  
+
                 </div>
               </li>
             ) : (
