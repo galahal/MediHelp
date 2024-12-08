@@ -8,16 +8,27 @@
 // import Cart from './components/Cart'; // Example component for Cart page
 
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter,Route,Routes, useLocation } from "react-router-dom";
 import Header from "./components/Header/Header";
+import Header2 from "./components/Header/Header2";
 import Register from './pages/Registration/Reg'; // Correct import for Register
+import AppRoutes from "./AppRoutes";
 
-const App = () => {
+// const location=useLocation();
+// const isReg = location.pathname === "/register";
+
+function App() {
+
+
   return (
     <BrowserRouter>
+      {/* {isReg ? <Header2 />: <Header /> } */}
       <Header />
-      <Register /> {/* Directly rendering the Register component */}
+      <AppRoutes /> {/* Directly rendering the Register component */}
     </BrowserRouter>
+
+
+
   );
 };
 
