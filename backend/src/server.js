@@ -1,18 +1,14 @@
 import dotenv from 'dotenv';
 dotenv.config();
-
 import express from 'express';
 import cors from 'cors';
-
 // Import routers
 import medicineRouter from './routers/medicine.router.js';
 import doctorRouter from './routers/doctor.router.js';
 import userRouter from './routers/user.router.js';
 import pharmacyRouter from './routers/pharmacy.router.js';
-
 import { dbconnect } from './config/database.config.js';
 dbconnect();
-
 const app = express();
 
 app.use(cors({
