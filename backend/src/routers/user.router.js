@@ -97,7 +97,7 @@ const router = express.Router();
 
 router.post('/register', async (req, res) => {
     try {
-        const { name, address, email, contactNumber, password } = req.body;
+        const { name, address, email, contact, password } = req.body;
         
         // Check if user already exists
         const existingUser = await UserModel.findOne({ email });
@@ -105,7 +105,7 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        const newUser = new UserModel({ name, address, email, contactNumber, password });
+        const newUser = new UserModel({ name, address, email, contact, password });
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {

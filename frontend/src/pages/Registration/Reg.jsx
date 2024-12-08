@@ -86,8 +86,9 @@ const Register = () => {
   // Define state variables for form fields
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
+  const [contact, setContact] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  // const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   
   const handleSubmit = async (e) => {
@@ -98,7 +99,7 @@ const Register = () => {
       name: name,
       address: address,
       email: email,
-      phone: phone,
+      contact: contact,
       password: password,
     };
 
@@ -159,9 +160,9 @@ const Register = () => {
             />
             <input
               type="text"
-              placeholder="Phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Contact"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
               className="border border-gray-300 p-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50"
             />
             <input

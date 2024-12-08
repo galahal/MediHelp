@@ -46,6 +46,7 @@ dbconnect();
 
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
 // Middleware
 app.use(cors({
     origin: '*', // Frontend URL
