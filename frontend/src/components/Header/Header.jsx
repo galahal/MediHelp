@@ -36,6 +36,7 @@ const Header = () => {
                   <a onClick={logout}>Logout</a>
                   <Link to="/dashboard">Profile</Link>
                   <Link to="/register">Reg</Link>
+                  <Link to="/login">Login</Link>
 
                 </div>
               </li>

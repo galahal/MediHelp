@@ -69,7 +69,7 @@
 import express from 'express';
 import { Router } from "express";
 import { UserModel } from '../models/user.model.js';  // Named import
-
+import jwt from 'jsonwebtoken'; // Import jsonwebtoken
 
 const router = express.Router();
 
@@ -114,5 +114,42 @@ router.post('/register', async (req, res) => {
     }
 });
 
-
+// Login Route
+router.post('/login', async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      // Check if the user exists
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // Validate password (direct comparison)
+      if (user.password !== password) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+  
+      // Generate JWT token
+      const token = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_SECRET, // Ensure this is set in your .env file
+        { expiresIn: '1h' }
+      );
+  
+      res.status(200).json({
+        message: "Login successful",
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        },
+      });
+    } catch (error) {
+      console.error("Error during login:", error); // Log the error for debugging
+      res.status(500).json({ message: 'Error during login', error: error.message });
+    }
+  });
+//   module.exports = router;
 export default router;
