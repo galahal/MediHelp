@@ -1,9 +1,14 @@
-
 import { Router } from "express";
 import { PharmacyModel } from "../models/pharmacy.model.js";
 import { UserModel } from "../models/user.model.js";
 
 const router = Router();
+
+// Define a list of allowed areas (if required)
+const allowedAreas = [
+    "Mohammadpur", "Matuail", "Saydabad", "Shyampur", "Mirpur (Gram)",
+    "Uttara (Gram)", "Badda", "Mohakhali", "Shonir Akhra"
+];
 
 // Get all pharmacies
 router.get("/", async (req, res) => {
@@ -18,13 +23,17 @@ router.get("/", async (req, res) => {
 // Create a new pharmacy
 router.post("/create", async (req, res) => {
     try {
-        const { name, address, contact, isEmergency, pharmacist } = req.body;
+        const { name, address, contact, isEmergency, area, pharmacist } = req.body;
 
         // Validate pharmacist
         const Pharmacist = await UserModel.findById(pharmacist);
-
         if (!Pharmacist || !Pharmacist.isPharmacist) {
             return res.status(400).json({ status: "FAILED", message: "Invalid pharmacist ID" });
+        }
+
+        // Validate area (optional, if you have predefined areas)
+        if (!allowedAreas.includes(area)) {
+            return res.status(400).json({ status: "FAILED", message: "Invalid area" });
         }
 
         // Create pharmacy
@@ -33,8 +42,10 @@ router.post("/create", async (req, res) => {
             address,
             contact,
             isEmergency,
-            pharmacist: pharmacist,
+            area,  // Save the area
+            pharmacist,
         });
+
         await newPharmacy.save();
 
         res.status(201).json({ status: "SUCCESS", newPharmacy });
@@ -42,12 +53,16 @@ router.post("/create", async (req, res) => {
         res.status(500).json({ status: "FAILED", error: error.message });
     }
 });
-
 // Update pharmacy details
 router.put("/:id", async (req, res) => {
     try {
         const pharmacyId = req.params.id;
         const updatedData = req.body;
+
+        // Validate area (optional)
+        if (updatedData.area && !allowedAreas.includes(updatedData.area)) {
+            return res.status(400).json({ status: "FAILED", message: "Invalid area" });
+        }
 
         const updatedPharmacy = await PharmacyModel.findByIdAndUpdate(pharmacyId, updatedData, { new: true });
         if (!updatedPharmacy) {
