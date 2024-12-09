@@ -4,6 +4,8 @@ import HomePage from './pages/Home/HomePage'; // Import the HomePage component
 import Dashboard from './pages/Dashboard/Dashboard'; // dashboard component
 import Register from './pages/Registration/Reg';
 import Login from './pages/Login/LoginPage';
+import ManagePharmacy from './pages/ManagePharmacy/ManagePharmacy';
+import RequestMedicine from './pages/RequstMedicine/RequestMedicine';
 
 export default function AppRoutes() {
   return (
@@ -15,6 +17,8 @@ export default function AppRoutes() {
     <Route path="/dashboard" element={<Dashboard />} /> {/* Render Dashboard here */} 
     <Route path="/register" element={<Register />} />
     <Route path="/login" element={<Login />} />
+    <Route path="/manage-pharmacy" element={<ManagePharmacy />} />
+    <Route path="/reqmed" element={<RequestMedicine />} />
     </Routes>
     
   );
