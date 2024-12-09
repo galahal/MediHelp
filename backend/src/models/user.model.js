@@ -7,7 +7,6 @@ export const UserSchema = new Schema(
     password: { type: String, required: true },
     contact: { type: String, required: true },
     address: { type: String, required: true },
-    // phone: { type: String, required: true }, 
     isAdmin: { type: Boolean, default: false },
     isPharmacist: { type: Boolean, default: false },
     isDoctor: { type: Boolean, default: false },
@@ -23,5 +22,12 @@ export const UserSchema = new Schema(
     },
   }
 );
+
+// Virtual field for associated pharmacies
+UserSchema.virtual('pharmacies', {
+  ref: 'pharmacy', // Matches the Pharmacy Model name
+  localField: '_id',
+  foreignField: 'pharmacist',
+});
 
 export const UserModel = model('user', UserSchema);
