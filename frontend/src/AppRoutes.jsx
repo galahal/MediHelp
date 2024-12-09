@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard/Dashboard'; // dashboard component
 import Register from './pages/Registration/Reg';
 import Login from './pages/Login/LoginPage';
 import ManagePharmacy from './pages/ManagePharmacy/ManagePharmacy';
-import RequestMedicine from './pages/RequstMedicine/RequestMedicine';
+import RequestMedicine from './pages/RequestMedicine/RequestMedicine';
 
 export default function AppRoutes() {
   return (

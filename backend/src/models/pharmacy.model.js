@@ -6,6 +6,7 @@ export const PharmacySchema = new Schema(
     address: { type: String, required: true },
     contact: { type: String, required: true },
     isEmergency: { type: Boolean, default: false },
+    area: { type: String, required: true },
     // Reference to User Model
     pharmacist: { 
       type: Types.ObjectId, 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const RequestMedicine = () => {
     const [formData, setFormData] = useState({
@@ -6,10 +6,46 @@ const RequestMedicine = () => {
         genericName: '',
         strength: '',
         quantity: '',
-        manufacturer: ''
+        manufacturer: '',
+        area: '', // New field for area selection
     });
 
+    const [areas, setAreas] = useState([]); // To store fetched areas + default options
     const [showPrompt, setShowPrompt] = useState(false);
+
+    // Default area options
+    const defaultAreas = [
+        "Mohammadpur",
+        "Matuail",
+        "Saydabad",
+        "Shyampur",
+        "Mirpur (Gram)",
+        "Uttara (Gram)",
+        "Badda",
+        "Mohakhali",
+        "Shonir Akhra"
+    ];
+
+    // Fetch areas on component mount
+    useEffect(() => {
+        const fetchAreas = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/pharmacies/areas');
+                if (response.ok) {
+                    const data = await response.json();
+                    setAreas([...defaultAreas, ...data]); // Merge default and fetched areas
+                } else {
+                    console.error('Failed to fetch areas.');
+                    setAreas(defaultAreas); // Fallback to default areas if API fails
+                }
+            } catch (error) {
+                console.error('Error fetching areas:', error);
+                setAreas(defaultAreas); // Fallback to default areas if an error occurs
+            }
+        };
+
+        fetchAreas();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -89,6 +125,22 @@ const RequestMedicine = () => {
                         onChange={handleChange}
                         className="w-full p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:ring focus:ring-blue-300"
                     />
+
+                    {/* Area Dropdown */}
+                    <select
+                        name="area"
+                        value={formData.area}
+                        onChange={handleChange}
+                        className="w-full p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:ring focus:ring-blue-300"
+                    >
+                        <option value="">Select Area</option>
+                        {areas.map((area, index) => (
+                            <option key={index} value={area}>
+                                {area}
+                            </option>
+                        ))}
+                    </select>
+
                     <button
                         type="submit"
                         className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600"

@@ -38,7 +38,7 @@ const Header = () => {
                   <Link to="/register">Reg</Link>
                   <Link to="/login">Login</Link>
                   <Link to="/manage-pharmacy">MNG Pharmacy</Link>
-                  <Link to="/reqmed">Req Med</Link>
+                  <Link to="/reqmed">Req-Med</Link>
                 </div>
               </li>
             ) : (
