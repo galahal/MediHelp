@@ -1,26 +1,78 @@
-import { Router } from "express";
 
+import { Router } from "express";
 import { PharmacyModel } from "../models/pharmacy.model.js";
+import { UserModel } from "../models/user.model.js";
 
 const router = Router();
 
 // Get all pharmacies
 router.get("/", async (req, res) => {
     try {
-        const allPharmacies = await PharmacyModel.find({});
+        const allPharmacies = await PharmacyModel.find({}).populate("pharmacist", "name email");
         res.status(200).json({ status: "SUCCESS", allPharmacies });
     } catch (error) {
-        res.status(500).json({ status: "FAILED", error });
+        res.status(500).json({ status: "FAILED", error: error.message });
     }
 });
 
 // Create a new pharmacy
 router.post("/create", async (req, res) => {
     try {
-        const newPharmacy = await PharmacyModel.create(req.body);
-        res.status(200).json({ status: "SUCCESS", newPharmacy });
+        const { name, address, contact, isEmergency, pharmacist } = req.body;
+
+        // Validate pharmacist
+        const Pharmacist = await UserModel.findById(pharmacist);
+
+        if (!Pharmacist || !Pharmacist.isPharmacist) {
+            return res.status(400).json({ status: "FAILED", message: "Invalid pharmacist ID" });
+        }
+
+        // Create pharmacy
+        const newPharmacy = new PharmacyModel({
+            name,
+            address,
+            contact,
+            isEmergency,
+            pharmacist: pharmacist,
+        });
+        await newPharmacy.save();
+
+        res.status(201).json({ status: "SUCCESS", newPharmacy });
     } catch (error) {
-        res.status(500).json({ status: "FAILED", error });
+        res.status(500).json({ status: "FAILED", error: error.message });
+    }
+});
+
+// Update pharmacy details
+router.put("/:id", async (req, res) => {
+    try {
+        const pharmacyId = req.params.id;
+        const updatedData = req.body;
+
+        const updatedPharmacy = await PharmacyModel.findByIdAndUpdate(pharmacyId, updatedData, { new: true });
+        if (!updatedPharmacy) {
+            return res.status(404).json({ status: "FAILED", message: "Pharmacy not found" });
+        }
+
+        res.status(200).json({ status: "SUCCESS", updatedPharmacy });
+    } catch (error) {
+        res.status(500).json({ status: "FAILED", error: error.message });
+    }
+});
+
+// Delete a pharmacy
+router.delete("/:id", async (req, res) => {
+    try {
+        const pharmacyId = req.params.id;
+
+        const deletedPharmacy = await PharmacyModel.findByIdAndDelete(pharmacyId);
+        if (!deletedPharmacy) {
+            return res.status(404).json({ status: "FAILED", message: "Pharmacy not found" });
+        }
+
+        res.status(200).json({ status: "SUCCESS", message: "Pharmacy deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ status: "FAILED", error: error.message });
     }
 });
 
