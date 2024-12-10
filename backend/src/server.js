@@ -50,6 +50,7 @@ import { dbconnect } from "./config/database.config.js";
 // Import routers
 import userRouter from "./routers/user.router.js";
 import pharmacyRouter from "./routers/pharmacy.router.js";
+import reqRouter from './routers/req.router.js';
 
 dotenv.config();
 dbconnect();
@@ -72,6 +73,12 @@ app.use("/api/pharmacy", pharmacyRouter);
 app.get("/", (req, res) => {
     res.status(200).json("API is working");
 });
+
+//Req routes
+ // Update path as needed
+app.use('/api/req', reqRouter); // Routes for medicine requests
+
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
