@@ -66,13 +66,6 @@
 
 // export default router;
 
-import express from 'express';
-import { Router } from "express";
-import { UserModel } from '../models/user.model.js';  // Named import
-import jwt from 'jsonwebtoken'; // Import jsonwebtoken
-
-const router = express.Router();
-
 // router.post('/register', async (req, res) => {
 //     try {
 //         const { name, address, email, contactNumber, password } = req.body;
@@ -95,61 +88,232 @@ const router = express.Router();
 //     }
 // });
 
-router.post('/register', async (req, res) => {
-    try {
-        const { name, address, email, contact, password } = req.body;
-        
-        // Check if user already exists
-        const existingUser = await UserModel.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
-        }
 
-        const newUser = new UserModel({ name, address, email, contact, password });
-        await newUser.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        console.error("Error during registration:", error); // Log the error to the terminal
-        res.status(500).json({ message: 'Error registering user', error: error.message });
+
+// import express from 'express';
+// import { Router } from "express";
+// import { UserModel } from '../models/user.model.js';  // Named import
+// import jwt from 'jsonwebtoken'; // Import jsonwebtoken
+
+// const router = express.Router();
+
+
+// router.post('/register', async (req, res) => {
+//     try {
+//         const { name, address, email, contact, password } = req.body;
+        
+//         // Check if user already exists
+//         const existingUser = await UserModel.findOne({ email });
+//         if (existingUser) {
+//             return res.status(400).json({ message: "User already exists" });
+//         }
+
+//         const newUser = new UserModel({ name, address, email, contact, password });
+//         await newUser.save();
+//         res.status(201).json({ message: 'User registered successfully' });
+//     } catch (error) {
+//         console.error("Error during registration:", error); // Log the error to the terminal
+//         res.status(500).json({ message: 'Error registering user', error: error.message });
+//     }
+// });
+
+// // Login Route //check kortesi
+// // router.post('/login', async (req, res) => {
+// //     try {
+// //       const { email, password } = req.body;
+  
+// //       // Check if the user exists
+// //       const user = await UserModel.findOne({ email });
+// //       if (!user) {
+// //         return res.status(404).json({ message: "User not found" });
+// //       }
+  
+// //       // Validate password (direct comparison)
+// //       if (user.password !== password) {
+// //         return res.status(401).json({ message: "Invalid email or password" });
+// //       }
+  
+// //       // Generate JWT token
+// //       const token = jwt.sign(
+// //         { id: user._id, email: user.email },
+// //         process.env.JWT_SECRET, // Ensure this is set in your .env file
+// //         { expiresIn: '1h' }
+// //       );
+  
+// //       res.status(200).json({
+// //         message: "Login successful",
+// //         token,
+// //         user: {
+// //           id: user._id,
+// //           name: user.name,
+// //           email: user.email,
+// //         },
+// //       });
+// //     } catch (error) {
+// //       console.error("Error during login:", error); // Log the error for debugging
+// //       res.status(500).json({ message: 'Error during login', error: error.message });
+// //     }
+// //   });
+// // //   module.exports = router;
+
+
+
+// router.post("/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     // Check if the user exists
+//     const user = await UserModel.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // Validate password (direct comparison)
+//     if (user.password !== password) {
+//       return res.status(401).json({ message: "Invalid email or password" });
+//     }
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       {
+//         id: user._id,
+//         email: user.email,
+//         role: user.isAdmin
+//           ? "Admin"
+//           : user.isPharmacist
+//           ? "Pharmacist"
+//           : user.isDoctor
+//           ? "Doctor"
+//           : "Regular",
+//       },
+//       process.env.JWT_SECRET, // Ensure this is set in your .env file
+//       { expiresIn: "1h" }
+//     );
+
+//     res.status(200).json({
+//       message: "Login successful",
+//       token,
+//       user: {
+//         id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         role: user.isAdmin
+//           ? "Admin"
+//           : user.isPharmacist
+//           ? "Pharmacist"
+//           : user.isDoctor
+//           ? "Doctor"
+//           : "Regular",
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error during login:", error); // Log the error for debugging
+//     res.status(500).json({ message: "Error during login", error: error.message });
+//   }
+// });
+
+
+// export default router;
+
+import express from 'express';
+import { Router } from "express";
+import { UserModel } from '../models/user.model.js'; // Named import
+import jwt from 'jsonwebtoken'; // Import jsonwebtoken
+
+const router = express.Router();
+
+router.post('/register', async (req, res) => {
+  try {
+    const { name, address, email, contact, password } = req.body;
+    
+    // Check if user already exists
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     }
+
+    const newUser = new UserModel({ name, address, email, contact, password });
+    await newUser.save();
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error("Error during registration:", error); // Log the error to the terminal
+    res.status(500).json({ message: 'Error registering user', error: error.message });
+  }
 });
 
-// Login Route
-router.post('/login', async (req, res) => {
-    try {
-      const { email, password } = req.body;
-  
-      // Check if the user exists
-      const user = await UserModel.findOne({ email });
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-  
-      // Validate password (direct comparison)
-      if (user.password !== password) {
-        return res.status(401).json({ message: "Invalid email or password" });
-      }
-  
-      // Generate JWT token
-      const token = jwt.sign(
-        { id: user._id, email: user.email },
-        process.env.JWT_SECRET, // Ensure this is set in your .env file
-        { expiresIn: '1h' }
-      );
-  
-      res.status(200).json({
-        message: "Login successful",
-        token,
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-        },
-      });
-    } catch (error) {
-      console.error("Error during login:", error); // Log the error for debugging
-      res.status(500).json({ message: 'Error during login', error: error.message });
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check if the user exists
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-  });
-//   module.exports = router;
+
+    // Validate password (direct comparison)
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Determine the user role
+    const role = user.isAdmin
+      ? "Admin"
+      : user.isPharmacist
+      ? "Pharmacist"
+      : user.isDoctor
+      ? "Doctor"
+      : "Regular";
+
+    // Log the role to the console
+    console.log(`User role: ${role}`);
+
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        role, // Use the calculated role
+      },
+      process.env.JWT_SECRET, // Ensure this is set in your .env file
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role, // Use the calculated role
+      },
+    });
+  } catch (error) {
+    console.error("Error during login:", error); // Log the error for debugging
+    res.status(500).json({ message: "Error during login", error: error.message });
+  }
+});
+// Protected Routes for Dashboard
+// router.get("/dashboard/admin", verifyToken, authorizeRoles("Admin"), (req, res) => {
+//   res.json({ message: "Welcome to Admin Dashboard!" });
+// });
+
+// router.get(
+//   "/dashboard/pharmacist",
+//   verifyToken,
+//   authorizeRoles("Pharmacist"),
+//   (req, res) => {
+//     res.json({ message: "Welcome to Pharmacist Dashboard!" });
+//   }
+// );
+
+// router.get("/dashboard/doctor", verifyToken, authorizeRoles("Doctor"), (req, res) => {
+//   res.json({ message: "Welcome to Doctor Dashboard!" });
+// });
+
+// router.get("/dashboard/regular", verifyToken, authorizeRoles("Regular"), (req, res) => {
+//   res.json({ message: "Welcome to Regular User Dashboard!" });
+// });
+
 export default router;
