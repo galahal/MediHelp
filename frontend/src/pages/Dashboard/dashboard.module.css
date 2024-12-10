@@ -7,7 +7,7 @@
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto; /* Center the dashboard on the page */
 }
 
@@ -54,6 +54,14 @@
   margin-top: 5px;
 }
 
+/* User contact and address information */
+.userInfoText {
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
 /* Dashboard content container */
 .dashboardContent {
   background-color: #ffffff;
@@ -69,6 +77,7 @@
   color: #333;
   margin: 0;
 }
+
 /* Dropdown container */
 .dropdown {
   position: relative;
@@ -86,7 +95,7 @@
   color: #333;
 }
 
-/* Dropdown menu */
+/* Dropdown menu - Hidden by default */
 .dropdownMenu {
   position: absolute;
   top: 40px;
@@ -98,6 +107,12 @@
   z-index: 10;
   width: 200px;
   padding: 10px 0;
+  display: none; /* Initially hidden */
+}
+
+/* Dropdown menu becomes visible on hover */
+.dropdown:hover .dropdownMenu {
+  display: block; /* Show on hover */
 }
 
 /* Dropdown list styling */
@@ -118,4 +133,64 @@
 
 .dropdownItem:hover {
   background-color: #f0f0f0;
+}
+
+.updateInfoTab {
+  padding: 20px;
+}
+
+.updateForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.formGroup label {
+  width: 150px;
+}
+
+.formGroup input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.formGroup button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.formGroup button:hover {
+  background-color: #0056b3;
+}
+
+.successMessage {
+  color: green;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.backButton {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.backButton:hover {
+  background-color: #0056b3;
 }
