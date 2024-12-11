@@ -443,7 +443,7 @@ const RequestMedicine = () => {
 
     return (
         <div className="bg-gray-100 min-h-screen flex flex-col">
-            <header className="bg-blue-100 p-4 flex justify-between items-center">
+            {/* <header className="bg-blue-100 p-4 flex justify-between items-center">
                 <div className="text-xl font-bold">MediHelp</div>
                 <nav>
                     <ul className="flex space-x-4">
@@ -453,7 +453,7 @@ const RequestMedicine = () => {
                         <li><a href="/profile" className="text-gray-800 font-semibold hover:text-blue-600">User</a></li>
                     </ul>
                 </nav>
-            </header>
+            </header> */}
 
             <main className="flex-grow flex flex-col items-center mt-8">
                 <h1 className="text-3xl font-bold mb-6">Request Medicine</h1>
