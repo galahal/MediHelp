@@ -1,7 +1,9 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* In your main CSS file (e.g., index.css or App.css) */
+@import "@material-tailwind/react/tailwind.css";
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";

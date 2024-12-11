@@ -94,12 +94,12 @@
 //for pharmacy//
 ,
   {
-    "name": "Pharmacy 2",
+    "name": "Faiyaz",
     "address": "Address 2",
     "contact": "+880987654321",
     "isEmergency": false,
     "area": "Gulshan",
-    "pharmacist":"6756ebbfb88bdb1e8493d342"
+    "pharmacist":"675612483aa6c97ec83bc8ed"
   },
   {
     "name": "Pharmacy 3",

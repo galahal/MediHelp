@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import logo from "../../assets/dddw.jpeg";
 import { useNavigate } from "react-router-dom";
+import MediHelpLogo from "../../assets/dddw.jpeg";
+import { Link } from "react-router-dom";
+import { Button } from "@material-tailwind/react";
 
 const Login = () => {
-  // Define state variables for form fields
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    // Create the form data object
     const formData = {
       email: email,
       password: password,
@@ -35,14 +36,11 @@ const Login = () => {
         const result = await response.json();
         console.log('Login successful:', result);
         setSuccess('Login successful! Redirecting...');
-        // Save token or user info to localStorage/sessionStorage if needed
-        localStorage.setItem('token', result.token); // Save the JWT token
-        localStorage.setItem('user', JSON.stringify(result.user)); // Save user details
-
-        // Redirect to dashboard
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('user', JSON.stringify(result.user));
         setTimeout(() => {
-          navigate('/dashboard'); // Redirect to the /dashboard route
-        }, 1000); // Optional delay to show success message
+          navigate('/dashboard');
+        }, 1000);
       } else {
         const errorResponse = await response.json();
         setError(errorResponse.message || 'Login failed. Please try again.');
@@ -54,14 +52,38 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white rounded-lg shadow-md w-11/12 md:w-10/12 lg:w-8/12 xl:w-7/12 flex overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+      {/* Navbar */}
+      <nav className="bg-gradient-to-l from-cyan-500 to-white p-4 flex justify-between items-center w-full shadow-md"  style={{ position: 'relative', top: '-140px' }}  >
+        <div className="flex items-center space-x-2">
+          <img
+            src={MediHelpLogo}
+            alt="MediHelp Logo"
+            className="h-10"
+          />
+          <span className="text-2xl font-bold text-blue-800">MediHelp</span>
+        </div>
+        <div className="flex space-x-4">
+          <Link to="/">
+            <Button color="light-blue" size="sm" ripple={true}>
+              Home
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button color="light-blue" size="sm" ripple={true}>
+              Register
+            </Button>
+          </Link>
+        </div>
+      </nav>
+
+      {/* Login Section */}
+      <div className="bg-white rounded-lg shadow-md w-11/12 md:w-10/12 lg:w-8/12 xl:w-7/12 flex overflow-hidden mt-8">
         {/* Left Section: Form */}
         <div className="w-2/3 p-8">
           <h1 className="text-3xl font-bold text-blue-900 mb-4">Login</h1>
           <p className="text-gray-600 mb-6">Welcome back! Please login to your account</p>
           <form className="space-y-4" onSubmit={handleSubmit}>
-            {/* Input Fields */}
             <input
               type="email"
               placeholder="Email"
@@ -77,13 +99,9 @@ const Login = () => {
               className="border border-gray-300 p-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50"
             />
 
-            {/* Error Message */}
             {error && <p className="text-red-500 text-sm">{error}</p>}
-
-            {/* Success Message */}
             {success && <p className="text-green-500 text-sm">{success}</p>}
 
-            {/* Login Button */}
             <button
               type="submit"
               className="bg-blue-500 text-white py-2 px-4 rounded-md w-full hover:bg-blue-600 transition"
@@ -91,11 +109,9 @@ const Login = () => {
               Login
             </button>
           </form>
-
-          {/* Forgot Password */}
           <div className="mt-4">
             <p className="text-sm text-gray-700">
-              Forgot your password?{" "}
+              Forgot your password?{' '}
               <span className="text-blue-500 underline cursor-pointer">Click here</span>
             </p>
           </div>
