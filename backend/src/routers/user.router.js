@@ -5,25 +5,6 @@ import jwt from 'jsonwebtoken'; // Import jsonwebtoken
 
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
-  try {
-    const { name, address, email, contact, password } = req.body;
-    
-    // Check if user already exists
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    const newUser = new UserModel({ name, address, email, contact, password });
-    await newUser.save();
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    console.error("Error during registration:", error); // Log the error to the terminal
-    res.status(500).json({ message: 'Error registering user', error: error.message });
-  }
-});
-
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -78,9 +59,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
 router.post('/register', async (req, res) => {
     try {
-        const { name, address, email, contactNumber, password } = req.body;
+        const { name, address, email, contact, password } = req.body;
         
         // Check if the user already exists by email
         const existingUser = await UserModel.findOne({ email });
@@ -89,7 +71,7 @@ router.post('/register', async (req, res) => {
         }
 
         // Create a new user with the provided data
-        const newUser = new UserModel({ name, address, email, contactNumber, password });
+        const newUser = new UserModel({ name, address, email, contact, password });
 
         // Save the user to the database
         await newUser.save();
@@ -99,6 +81,8 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ message: 'Error registering user', error });
     }
 });
+
+
 router.get("/", async (req, res) => {
   try {
       const allUsers = await UserModel.find({});
@@ -107,6 +91,8 @@ router.get("/", async (req, res) => {
       res.status(500).json({ status: "FAILED", error });
   }
 });
+
+
 router.get('/email/:email', async (req, res) => {
   try {
       const { email } = req.params; // Get email from URL parameter
@@ -125,7 +111,7 @@ router.get('/email/:email', async (req, res) => {
               name: user.name,
               email: user.email,
               address: user.address,
-              contactNumber: user.contactNumber,
+              contact: user.contact,
           },
       });
   } catch (error) {
@@ -133,6 +119,7 @@ router.get('/email/:email', async (req, res) => {
       res.status(500).json({ status: "FAILED", message: "Internal server error", error: error.message });
   }
 });
+
 
 // Update email API
 router.put("/update-email/:id", async (req, res) => {
@@ -168,45 +155,50 @@ router.put("/update-email/:id", async (req, res) => {
     res.status(500).json({ status: "FAILED", message: "Internal server error", error: error.message });
   }
 });
-router.put("/update-password/:id", async (req, res) => {
-  try {
-    const { id } = req.params; // Get user ID from URL parameter
-    const { oldPassword, newPassword } = req.body; // Get old and new passwords from the request body
 
-    // Validate input
-    if (!oldPassword || !newPassword || typeof newPassword !== "string" || newPassword.length < 6) {
-      return res.status(400).json({
-        status: "FAILED",
-        message: "Invalid input. Password must be at least 6 characters long.",
-      });
-    }
 
-    // Find the user by ID
-    const user = await UserModel.findById(id);
-    if (!user) {
-      return res.status(404).json({ status: "FAILED", message: "User not found" });
-    }
+// For hashed pass
+// router.put("/update-password/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params; // Get user ID from URL parameter
+//     const { oldPassword, newPassword } = req.body; // Get old and new passwords from the request body
 
-    // Check if the old password matches
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ status: "FAILED", message: "Old password is incorrect" });
-    }
+//     // Validate input
+//     if (!oldPassword || !newPassword || typeof newPassword !== "string" || newPassword.length < 6) {
+//       return res.status(400).json({
+//         status: "FAILED",
+//         message: "Invalid input. Password must be at least 6 characters long.",
+//       });
+//     }
 
-    // Hash the new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
+//     // Find the user by ID
+//     const user = await UserModel.findById(id);
+//     if (!user) {
+//       return res.status(404).json({ status: "FAILED", message: "User not found" });
+//     }
 
-    // Update the user's password
-    user.password = hashedPassword;
-    await user.save();
+//     // Check if the old password matches
+//     const isMatch = await bcrypt.compare(oldPassword, user.password);
+//     if (!isMatch) {
+//       return res.status(400).json({ status: "FAILED", message: "Old password is incorrect" });
+//     }
 
-    res.status(200).json({ status: "SUCCESS", message: "Password updated successfully" });
-  } catch (error) {
-    console.error("Error updating password:", error);
-    res.status(500).json({ status: "FAILED", message: "Internal server error", error: error.message });
-  }
-});
+//     // Hash the new password
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+//     // Update the user's password
+//     user.password = hashedPassword;
+//     await user.save();
+
+//     res.status(200).json({ status: "SUCCESS", message: "Password updated successfully" });
+//   } catch (error) {
+//     console.error("Error updating password:", error);
+//     res.status(500).json({ status: "FAILED", message: "Internal server error", error: error.message });
+//   }
+// });
+
+
 router.put("/update-address/:id", async (req, res) => {
   try {
     const { id } = req.params; // Get user ID from URL parameter
@@ -236,19 +228,21 @@ router.put("/update-address/:id", async (req, res) => {
     res.status(500).json({ status: "FAILED", message: "Internal server error", error: error.message });
   }
 });
+
+
 router.put("/update-contact/:id", async (req, res) => {
   try {
     const { id } = req.params; // Get user ID from URL parameter
     const { newContact } = req.body; // Get the new contact number from the request body
 
-    // Validate input
-    const contactRegex = /^[0-9]{10,15}$/; // Example regex for a valid contact number (10-15 digits)
-    if (!newContact || !contactRegex.test(newContact)) {
-      return res.status(400).json({
-        status: "FAILED",
-        message: "Invalid input. Contact number must be 10-15 digits.",
-      });
-    }
+    // // Validate input
+    // const contactRegex = /^[0-9]{10,15}$/; // Example regex for a valid contact number (10-15 digits)
+    // if (!newContact || !contactRegex.test(newContact)) {
+    //   return res.status(400).json({
+    //     status: "FAILED",
+    //     message: "Invalid input. Contact number must be 10-15 digits.",
+    //   });
+    // }
 
     // Find the user by ID
     const user = await UserModel.findById(id);
