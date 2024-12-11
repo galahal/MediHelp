@@ -1,87 +1,10 @@
-// import { Link } from 'react-router-dom';
-// import classes from './header.module.css';
-
-// const Header = () => {
-//   console.log('Header component rendered'); // Add this to debug
-//   const user = { name: "Faiyaz" };
-//   const cart = { totalCount: 10 };
-
-//   const logout = () => {
-//     console.log("Logout clicked!");
-//   };
-//   const dashboard = () =>{
-//     return(
-//       <div>
-//         <h1>Dashboard</h1>
-//         <p>Welcome to your dashboard</p>
-//       </div>
-//     )
-//   }
-
-//   return (
-//     <header className={classes.header}>
-//       <div className={classes.container}>
-//         {/* <Link to="/" className={classes.logo}> */}
-//           Medihelp
-//         {/* </Link> */}
-//         <nav>
-//           <ul>
-//             {user ? (
-//               <li className={classes.menu_container}>
-//                 {/* <Link to="/profile">{user.name}</Link> */}
-//                 {user.name}
-//                 <div className={classes.menu}>
-//                   {/* <Link to="/profile">Profile</Link>
-//                   <Link to="/orders">Orders</Link> */}
-//                   <a onClick={logout}>Logout</a>
-//                   <Link to="/dashboard">Profile</Link>
-//                   <Link to="/register">Reg</Link>
-//                   <Link to="/login">Login</Link>
-//                   <Link to="/manage-pharmacy">MNG Pharmacy</Link>
-//                   <Link to="/reqmed">Req-Med</Link>
-//                   <Link to="/manage-medicine">MNG Med</Link>
-//                 </div>
-//               </li>
-//             ) : (
-//               <li>
-//                 {/* <Link to="/login">Login</Link> */}
-//               </li>
-//             )}
-//             <li>
-//               {/* <Link to="/cart"> */}
-//                 Cart
-//                 {cart.totalCount > 0 && <span>({cart.totalCount})</span>}
-//               {/* </Link> */}
-//             </li>
-//           </ul>
-//         </nav>
-//       </div>
-//     </header>
-//   );
-// };
-
-// export default Header;
-
-
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import MediHelpLogo from "../../assets/dddw.jpeg";
+import { ThemeContext } from "../../ThemeContext.jsx"; // Import the ThemeContext
 
 const Navbar = ({ user }) => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <nav
@@ -181,7 +104,7 @@ const Navbar = ({ user }) => {
                 Your Profile
               </Link>
               <Link
-                to="/dashboard"
+                to="/settings"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 Settings
@@ -207,3 +130,104 @@ const Navbar = ({ user }) => {
 };
 
 export default Navbar;
+
+
+// import React, { useContext } from 'react';
+// import { Link } from 'react-router-dom';
+// import MediHelpLogo from '../../assets/dddw.jpeg';
+// import { ThemeContext } from '../../ThemeContext.jsx';
+
+// const Navbar = ({ user }) => {
+//   const { theme, toggleTheme } = useContext(ThemeContext);
+
+//   return (
+//     <nav className={`sticky top-0 z-50 bg-gradient-to-r ${theme === 'dark' ? 'from-blue-900 via-gray-800 to-blue-800' : 'from-white via-blue-100 to-pink-100'} shadow-md`}>
+//       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
+//         {/* Logo Section */}
+//         <div className="flex items-center gap-2">
+//           <img src={MediHelpLogo} alt="Logo" className="h-8 w-8 rounded" />
+//           <h1 className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>MediHelp</h1>
+//         </div>
+
+//         {/* Buttons and User Section */}
+//         <div className="flex items-center gap-4">
+//           {/* Navigation Links */}
+//           <div className="flex gap-4">
+//             <Link
+//               to="/"
+//               className={`px-3 py-1 rounded text-sm font-medium ${theme === 'dark' ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+//             >
+//               Home
+//             </Link>
+//             <Link
+//               to="/dashboard"
+//               className={`px-3 py-1 rounded text-sm font-medium ${theme === 'dark' ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+//             >
+//               Dashboard
+//             </Link>
+//             <Link
+//               to="/manage-medicine"
+//               className={`px-3 py-1 rounded text-sm font-medium ${theme === 'dark' ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+//             >
+//               Manage Medicine
+//             </Link>
+//             <Link
+//               to="/manage-pharmacy"
+//               className={`px-3 py-1 rounded text-sm font-medium ${theme === 'dark' ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+//             >
+//               Manage Pharmacy
+//             </Link>
+//             <Link
+//               to="/reqmed"
+//               className={`px-3 py-1 rounded text-sm font-medium ${theme === 'dark' ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+//             >
+//               Request Medicine
+//             </Link>
+//           </div>
+
+//           {/* User Profile Section */}
+//           <div className="relative">
+//             <button
+//               type="button"
+//               className="flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+//             >
+//               <img
+//                 src="https://ptpimg.me/xun121.png"
+//                 alt="User"
+//                 className="h-8 w-8 rounded-full"
+//               />
+//             </button>
+//             {/* Dropdown Menu */}
+//             <div className="absolute right-0 mt-2 hidden w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg group-hover:block">
+//               <Link
+//                 to="/profile"
+//                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+//               >
+//                 Your Profile
+//               </Link>
+//               <Link
+//                 to="/settings"
+//                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+//               >
+//                 Settings
+//               </Link>
+//               <button
+//                 onClick={toggleTheme}
+//                 className="block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+//               >
+//                 Toggle Theme
+//               </button>
+//               <button
+//                 className="block w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"
+//               >
+//                 Logout
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </nav>
+//   );
+// };
+
+// export default Navbar;

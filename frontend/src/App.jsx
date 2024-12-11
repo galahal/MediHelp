@@ -37,7 +37,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Header from "./components/Header/Header";
-import Header2 from "./components/Header/Header2";
 import Register from './pages/Registration/Reg'; // Correct import for Register
 import AppRoutes from "./AppRoutes";
 
