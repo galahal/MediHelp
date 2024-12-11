@@ -6,8 +6,8 @@ const router = Router();
 
 // Define a list of allowed areas (if required)
 const allowedAreas = [
-    "Mohammadpur", "Matuail", "Saydabad", "Shyampur", "Mirpur (Gram)",
-    "Uttara (Gram)", "Badda", "Mohakhali", "Shonir Akhra"
+    "Mohammadpur", "Matuail", "Saydabad", "Shyampur", "Mirpur",
+    "Uttara", "Badda", "Mohakhali", "Shonir Akhra", "Dhanmondi","Old Dhaka","Bashundhara","Gulshan","Banani"
 ];
 
 // Get all pharmacies

@@ -1,0 +1,153 @@
+[{
+    "name": "Ibuprofen 200mg",
+    "price": 20,
+    "tags": ["pain reliever", "anti-inflammatory"],
+    "imageUrl": "Ibuprofen-200mg.png",
+    "generics": "Ibuprofen",
+    "brand": "Square",
+    "expiryDate": "2026-10-01T00:00:00.000Z",
+    "createdAt": "2024-12-06T10:00:00.000Z",
+    "updatedAt": "2024-12-06T10:00:00.000Z"
+  },
+  {
+    "name": "Amoxicillin 500mg",
+    "price": 100,
+    "tags": ["antibiotic", "bacterial infection"],
+    "imageUrl": "Amoxicillin-500mg.png",
+    "generics": "Amoxicillin",
+    "brand": "ACI",
+    "expiryDate": "2027-03-15T00:00:00.000Z",
+    "createdAt": "2024-12-06T10:15:00.000Z",
+    "updatedAt": "2024-12-06T10:15:00.000Z"
+  },
+  {
+    "name": "Loratadine 10mg",
+    "price": 25,
+    "tags": ["antihistamine", "allergy"],
+    "imageUrl": "Loratadine-10mg.png",
+    "generics": "Loratadine",
+    "brand": "Beximco",
+    "expiryDate": "2025-08-20T00:00:00.000Z",
+    "createdAt": "2024-12-06T10:30:00.000Z",
+    "updatedAt": "2024-12-06T10:30:00.000Z"
+  },
+  {
+    "name": "Omeprazole 20mg",
+    "price": 40,
+    "tags": ["acid reflux", "ulcer"],
+    "imageUrl": "Omeprazole-20mg.png",
+    "generics": "Omeprazole",
+    "brand": "Eskayef",
+    "expiryDate": "2026-12-31T00:00:00.000Z",
+    "createdAt": "2024-12-06T10:45:00.000Z",
+    "updatedAt": "2024-12-06T10:45:00.000Z"
+  },
+  {
+    "name": "Cetirizine 10mg",
+    "price": 15,
+    "tags": ["antihistamine", "runny nose"],
+    "imageUrl": "Cetirizine-10mg.png",
+    "generics": "Cetirizine",
+    "brand": "Incepta",
+    "expiryDate": "2025-11-01T00:00:00.000Z",
+    "createdAt": "2024-12-06T11:00:00.000Z",
+    "updatedAt": "2024-12-06T11:00:00.000Z"
+  },
+  {
+    "name": "Azithromycin 250mg",
+    "price": 120,
+    "tags": ["antibiotic", "infection"],
+    "imageUrl": "Azithromycin-250mg.png",
+    "generics": "Azithromycin",
+    "brand": "Renata",
+    "expiryDate": "2027-01-01T00:00:00.000Z",
+    "createdAt": "2024-12-06T11:15:00.000Z",
+    "updatedAt": "2024-12-06T11:15:00.000Z"
+},
+{
+    "name": "Paracetamol 500mg",
+    "price": 50,
+    "tags": ["pain reliever", "fever"],
+    "imageUrl": "Paracetamol-ACME-500mg.png",
+    "generics": "Paracetamol",
+    "brand": "ACME",
+    "expiryDate": "2026-12-30T00:00:00.000Z",
+    "createdAt": "2024-12-06T08:58:06.669Z",
+    "updatedAt": "2024-12-06T08:58:06.669Z"
+  },
+  {
+    "name": "Vitamin C Tablet",
+    "price": 30,
+    "tags": ["immunity booster", "vitamin"],
+    "imageUrl": "Vitamin-C_Radiant.png",
+    "generics": "Ascorbic Acid",
+    "brand": "Radiant",
+    "expiryDate": "2027-12-30T00:00:00.000Z",
+    "createdAt": "2024-12-06T09:05:50.637Z",
+    "updatedAt": "2024-12-06T09:05:50.637Z"
+  }
+
+
+
+]
+
+//for pharmacy//
+,
+  {
+    "name": "Pharmacy 2",
+    "address": "Address 2",
+    "contact": "+880987654321",
+    "isEmergency": false,
+    "area": "Gulshan",
+    "pharmacist":"6756ebbfb88bdb1e8493d342"
+  },
+  {
+    "name": "Pharmacy 3",
+    "address": "Address 3",
+    "contact": "+880556677883",
+    "isEmergency": false,
+    "area": "Banani",
+    "pharmacist": "6756ebbfb88bdb1e8493d343" 
+  },
+  {
+    "name": "Pharmacy 4",
+    "address": "Address 4",
+    "contact": "+880556677884",
+    "isEmergency": true,
+    "area": "Shyampur",
+    "pharmacist":"6756ebbfb88bdb1e8493d344" 
+  },
+  {
+    "name": "Pharmacy 5",
+    "address": "Address 5",
+    "contact": "+880223344556",
+    "isEmergency": false,
+    "area": "Mirpur",
+    "pharmacist":"6756ebbfb88bdb1e8493d345" 
+  },
+  {
+    "name": "Pharmacy 6",
+    "address": "Address 6",
+    "contact": "+880667788990",
+    "isEmergency": true,
+    "area": "Bashundhara",
+    "pharmacist": "6756ebbfb88bdb1e8493d346" 
+  },
+  {
+    "name": "Pharmacy 7",
+    "address": "Address 7",
+    "contact": "+880112233445",
+    "isEmergency": false,
+    "area": "Uttara",
+    "pharmacist":"6756ebbfb88bdb1e8493d347" 
+  },
+  {
+    "name": "Pharmacy 8",
+    "address": "Address 8",
+    "contact": "+880998877665",
+    "isEmergency": true,
+    "area": "Old Dhaka",
+    "pharmacist": "6756ebbfb88bdb1e8493d348" 
+  }
+]
+

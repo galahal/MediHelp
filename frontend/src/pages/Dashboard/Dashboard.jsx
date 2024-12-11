@@ -140,7 +140,7 @@ export default function Dashboard() {
         <>
           <div className={classes.userInfo}>
             <img
-              src={user.photo || "https://via.placeholder.com/150"}
+              src={user.photo || "https://ptpimg.me/xun121.png"}
               alt={`${user.name}'s profile`}
               className={classes.userPhoto}
             />
