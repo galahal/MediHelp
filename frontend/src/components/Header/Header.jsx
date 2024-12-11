@@ -39,6 +39,7 @@ const Header = () => {
                   <Link to="/login">Login</Link>
                   <Link to="/manage-pharmacy">MNG Pharmacy</Link>
                   <Link to="/reqmed">Req-Med</Link>
+                  <Link to="/manage-medicine">MNG Med</Link>
                 </div>
               </li>
             ) : (

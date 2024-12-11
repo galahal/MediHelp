@@ -1,40 +1,38 @@
 import React from 'react';
-import { Link } from "react-router-dom";
-import classes from "./thumbnails.module.css";
-import StarRating from '../StarRating/StarRating';
 
 export default function Thumbnails({ medicines }) {
+  console.log('Medicines passed to Thumbnails:', medicines); // Debugging log
+
   return (
-    <ul className={classes.list}>
-      {medicines.map(medicine => (
-        <li key={medicine.id}>
-          <Link to={`/medicine/${medicine.id}`}>
-            <img 
-              className={classes.image}
-              src={`/medicines/${medicine.imageUrl}`}
-              alt={medicine.name} 
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+      {medicines.map((medicine) => {
+        const imageUrl = `/medicines/${medicine.imageUrl}`;
+
+        return (
+          <div key={medicine._id} className="relative p-4 border rounded shadow-md">
+            {/* Image with object-fit: contain */}
+            <img
+              src={imageUrl}
+              alt={medicine.name}
+              className="w-full h-40 object-contain rounded mb-4"
             />
-          </Link>
-          <div className={classes.content}>
-            <div className={classes.name}>{medicine.name}</div>
-            <span
-              className={`${classes.favorite} ${
-                medicine.favorite ? '' : classes.content
-              }`}
-            >
-              ❤
-            </span>
-            <div className={classes.stars}>
-              <StarRating stars={medicines.stars} />
-            </div>
-            <div className={classes.product_item_footer}>
-              <div className={classes.brand}>
-                <span>{medicine.brand}</span>
-              </div>
+            
+            {/* Medicine Details */}
+            <h2 className="text-xl font-semibold">
+              {medicine.name}
+              <span className="text-sm text-gray-600 ml-2">({medicine.generics})</span>
+            </h2>
+            <p className="text-gray-600">{medicine.brand}</p>
+            <p className="text-gray-800 font-bold">BDT {medicine.price.toFixed(2)}</p>
+            <p className="text-sm text-gray-500">{medicine.description}</p>
+
+            {/* Medicine Tags (bottom-right corner) */}
+            <div className="absolute bottom-4 right-4 bg-blue-500 text-white text-xs py-1 px-2 rounded-md">
+              {medicine.tags.join(', ')}
             </div>
           </div>
-        </li>
-      ))}
-    </ul>
+        );
+      })}
+    </div>
   );
 }

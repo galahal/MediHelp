@@ -51,6 +51,8 @@ import { dbconnect } from "./config/database.config.js";
 import userRouter from "./routers/user.router.js";
 import pharmacyRouter from "./routers/pharmacy.router.js";
 import reqRouter from './routers/req.router.js';
+import medicineRouter from "./routers/medicine.router.js";
+
 
 dotenv.config();
 dbconnect();
@@ -77,6 +79,10 @@ app.get("/", (req, res) => {
 //Req routes
  // Update path as needed
 app.use('/api/req', reqRouter); // Routes for medicine requests
+
+//Manage medicine
+app.use('/api/medicine',medicineRouter)
+
 
 
 

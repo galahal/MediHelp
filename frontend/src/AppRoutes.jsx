@@ -6,6 +6,7 @@ import Register from './pages/Registration/Reg';
 import Login from './pages/Login/LoginPage';
 import ManagePharmacy from './pages/ManagePharmacy/ManagePharmacy';
 import RequestMedicine from './pages/RequestMedicine/RequestMedicine';
+import ManageMedicine from './pages/ManageMedicine/ManageMedicine';
 
 export default function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AppRoutes() {
     <Route path="/login" element={<Login />} />
     <Route path="/manage-pharmacy" element={<ManagePharmacy />} />
     <Route path="/reqmed" element={<RequestMedicine />} />
+    <Route path="/manage-medicine" element={<ManageMedicine/>} />
     </Routes>
     
   );
