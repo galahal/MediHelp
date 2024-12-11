@@ -121,7 +121,7 @@ const ManagePharmacy = () => {
       const remaining = pharmacies.filter((pharmacy) => pharmacy._id !== id);
       setPharmacies(remaining);
       setFilteredPharmacies(remaining);
-      window.location.reload(); // Add this line
+      //window.location.reload(); // Add this line
     } catch (error) {
       console.error("Error deleting pharmacy:", error);
     }
@@ -268,6 +268,14 @@ const ManagePharmacy = () => {
                 <p>Contact: {pharmacy.contact}</p>
                 <p>Emergency: {pharmacy.isEmergency ? "Yes" : "No"}</p>
                 <p>Area: {pharmacy.area}</p>
+                {pharmacy.pharmacist && (
+                  <>
+                    <p>Pharmacist Name: {pharmacy.pharmacist.name}</p>
+                    <p>Pharmacist Email: {pharmacy.pharmacist.email}</p>
+                  </>
+                )}
+
+
                 <button onClick={() => handleEditClick(pharmacy)} className="mt-4 bg-blue-500 text-white p-2 rounded">
                   Edit
                 </button>
@@ -283,7 +291,7 @@ const ManagePharmacy = () => {
         ))}
       </div>
 
-      <div className="mt-8 flex justify-end">
+      {/* <div className="mt-8 flex justify-end">
         <button
           onClick={handleDeleteAll}
           className="bg-red-500 text-white py-2 px-6 rounded"
@@ -291,7 +299,7 @@ const ManagePharmacy = () => {
         >
           Delete Selected
         </button>
-      </div>
+      </div> */}
 
       {showPrompt && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
