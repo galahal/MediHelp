@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaEdit } from "react-icons/fa";
 
 const ManageMedicine = () => {
   const [medicines, setMedicines] = useState([]);
@@ -118,11 +119,24 @@ const ManageMedicine = () => {
               key={medicine._id}
               className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex flex-col relative"
             >
+              {/* Medicine Thumbnail */}
+              <img
+                src={`/medicines/${medicine.imageUrl || "placeholder-image.jpg"}`} // Construct path to image
+                alt={medicine.name}
+                className="w-full h-32 object-contain rounded-lg mb-4"
+              />
+
               {/* Medicine Details */}
               <h2 className="text-lg font-bold text-gray-800">{medicine.name}</h2>
               <p className="text-sm text-gray-600">Category: {medicine.category}</p>
+              <p className="text-sm text-gray-600">Generics: {medicine.generics || "N/A"}</p>
               <p className="text-sm text-gray-600">Price: ${medicine.price}</p>
               <p className="text-sm text-gray-600">Stock: {medicine.stock} units</p>
+
+              {/* Edit Icon */}
+              <button className="absolute top-4 right-16 text-blue-500 hover:text-blue-700">
+                <FaEdit size={20} />
+              </button>
 
               {/* Checkbox (Right-Aligned) */}
               <div className="absolute top-4 right-4">
