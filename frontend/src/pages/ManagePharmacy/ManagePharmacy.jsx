@@ -4,7 +4,17 @@ const ManagePharmacy = () => {
   const [pharmacies, setPharmacies] = useState([]);
   const [filteredPharmacies, setFilteredPharmacies] = useState([]);
   const [selectedPharmacies, setSelectedPharmacies] = useState([]);
+  const [editingPharmacy, setEditingPharmacy] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    address: "",
+    contact: "",
+    isEmergency: false,
+    area: "",
+  });
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterEmergency, setFilterEmergency] = useState(false);
+  const [selectedArea, setSelectedArea] = useState("All");
   const [showPrompt, setShowPrompt] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,22 +41,48 @@ const ManagePharmacy = () => {
     fetchPharmacies();
   }, []);
 
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
+  const applyFilters = (query, emergencyFilter, area) => {
+    let filtered = pharmacies;
 
-    const filtered = pharmacies.filter((pharmacy) =>
-      pharmacy.name.toLowerCase().includes(query)
-    );
+    if (query) {
+      filtered = filtered.filter((pharmacy) =>
+        pharmacy.name.toLowerCase().includes(query)
+      );
+    }
+
+    if (emergencyFilter) {
+      filtered = filtered.filter((pharmacy) => pharmacy.isEmergency);
+    }
+
+    if (area !== "All") {
+      filtered = filtered.filter((pharmacy) => pharmacy.area === area);
+    }
+
     setFilteredPharmacies(filtered);
   };
 
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    applyFilters(query, filterEmergency, selectedArea);
+  };
+
+  const handleToggleEmergency = () => {
+    const newFilter = !filterEmergency;
+    setFilterEmergency(newFilter);
+    applyFilters(searchQuery, newFilter, selectedArea);
+  };
+
+  const handleAreaChange = (e) => {
+    const area = e.target.value;
+    setSelectedArea(area);
+    applyFilters(searchQuery, filterEmergency, area);
+  };
+
   const handleCheckboxChange = (id) => {
-    if (selectedPharmacies.includes(id)) {
-      setSelectedPharmacies(selectedPharmacies.filter((pharmacyId) => pharmacyId !== id));
-    } else {
-      setSelectedPharmacies([...selectedPharmacies, id]);
-    }
+    setSelectedPharmacies((prev) =>
+      prev.includes(id) ? prev.filter((pharmacyId) => pharmacyId !== id) : [...prev, id]
+    );
   };
 
   const handleDeleteAll = () => {
@@ -62,125 +98,210 @@ const ManagePharmacy = () => {
         },
         body: JSON.stringify({ ids: selectedPharmacies }),
       });
-      setPharmacies(pharmacies.filter((pharmacy) => !selectedPharmacies.includes(pharmacy._id)));
-      setFilteredPharmacies(filteredPharmacies.filter((pharmacy) => !selectedPharmacies.includes(pharmacy._id)));
+      const remaining = pharmacies.filter(
+        (pharmacy) => !selectedPharmacies.includes(pharmacy._id)
+      );
+      setPharmacies(remaining);
+      setFilteredPharmacies(remaining);
       setSelectedPharmacies([]);
       setShowPrompt(false);
+      window.location.reload(); // Add this line
     } catch (error) {
       console.error("Error deleting pharmacies:", error);
     }
   };
 
-  const cancelDelete = () => {
-    setShowPrompt(false);
-  };
+  const cancelDelete = () => setShowPrompt(false);
 
   const handleIndividualDelete = async (id) => {
     try {
       await fetch(`http://localhost:5000/api/pharmacy/${id}`, {
         method: "DELETE",
       });
-      setPharmacies(pharmacies.filter((pharmacy) => pharmacy._id !== id));
-      setFilteredPharmacies(filteredPharmacies.filter((pharmacy) => pharmacy._id !== id));
+      const remaining = pharmacies.filter((pharmacy) => pharmacy._id !== id);
+      setPharmacies(remaining);
+      setFilteredPharmacies(remaining);
+      window.location.reload(); // Add this line
     } catch (error) {
       console.error("Error deleting pharmacy:", error);
     }
   };
 
-  if (loading) {
-    return <div>Loading pharmacies...</div>;
-  }
+  const handleEditClick = (pharmacy) => {
+    setEditingPharmacy(pharmacy._id);
+    setEditForm({
+      name: pharmacy.name,
+      address: pharmacy.address,
+      contact: pharmacy.contact,
+      isEmergency: pharmacy.isEmergency,
+      area: pharmacy.area,
+    });
+  };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handleEditChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEditForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleEditSubmit = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/pharmacy/${editingPharmacy}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      if (response.ok) {
+        const updatedPharmacy = await response.json();
+        const updatedList = pharmacies.map((pharmacy) =>
+          pharmacy._id === editingPharmacy ? updatedPharmacy : pharmacy
+        );
+        setPharmacies(updatedList);
+        setFilteredPharmacies(updatedList);
+        setEditingPharmacy(null);
+        window.location.reload(); // Add this line
+      } else {
+        console.error("Error updating pharmacy");
+      }
+    } catch (error) {
+      console.error("Error updating pharmacy:", error);
+    }
+  };
+
+  if (loading) return <div>Loading pharmacies...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  const areas = ["All", ...new Set(pharmacies.map((pharmacy) => pharmacy.area))];
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-2xl font-semibold text-gray-800 mb-6">Manage Pharmacies</h1>
 
-      {/* Search Bar */}
-      <div className="mb-6">
+      <div className="mb-4">
         <input
           type="text"
           placeholder="Search for a pharmacy..."
           value={searchQuery}
           onChange={handleSearch}
-          className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-3 border rounded-lg"
         />
       </div>
 
-      {/* Pharmacies Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPharmacies.length > 0 ? (
-          filteredPharmacies.map((pharmacy) => (
-            <div
-              key={pharmacy._id}
-              className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex flex-col relative"
-            >
-              {/* Pharmacy Details */}
-              <h2 className="text-lg font-bold text-gray-800">{pharmacy.name}</h2>
-              <p className="text-sm text-gray-600">Address: {pharmacy.address}</p>
-              <p className="text-sm text-gray-600">Contact: {pharmacy.contact}</p>
-              <p className="text-sm text-gray-600">
-                Emergency: {pharmacy.isEmergency ? "Yes" : "No"}
-              </p>
-              {pharmacy.pharmacist && (
-                <p className="text-sm text-gray-600">
-                  Pharmacist: {pharmacy.pharmacist.name} ({pharmacy.pharmacist.email})
-                </p>
-              )}
+      <div className="mb-6 flex gap-4">
+        <button
+          onClick={handleToggleEmergency}
+          className={`px-4 py-2 rounded text-white ${
+            filterEmergency ? "bg-green-500" : "bg-gray-500"
+          }`}
+        >
+          {filterEmergency ? "Show All" : "Show Emergency Only"}
+        </button>
 
-              {/* Checkbox (Right-Aligned) */}
-              <div className="absolute top-4 right-4">
-                <input
-                  type="checkbox"
-                  checked={selectedPharmacies.includes(pharmacy._id)}
-                  onChange={() => handleCheckboxChange(pharmacy._id)}
-                  className="w-4 h-4 text-blue-600 focus:ring-2 focus:ring-blue-400 border-gray-300 rounded"
-                />
-              </div>
-
-              {/* Delete Button */}
-              <button
-                onClick={() => handleIndividualDelete(pharmacy._id)}
-                className="mt-4 bg-red-500 text-white py-2 px-4 rounded-md shadow hover:bg-red-600 focus:ring-2 focus:ring-red-300 transition"
-              >
-                Delete
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-500 col-span-full">No pharmacies found.</p>
-        )}
+        <select value={selectedArea} onChange={handleAreaChange} className="p-2 border rounded">
+          {areas.map((area) => (
+            <option key={area} value={area}>
+              {area}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* Delete All Button */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredPharmacies.map((pharmacy) => (
+          <div key={pharmacy._id} className="bg-white p-4 rounded shadow">
+            {editingPharmacy === pharmacy._id ? (
+              <div>
+                <input
+                  type="text"
+                  name="name"
+                  value={editForm.name}
+                  onChange={handleEditChange}
+                  className="w-full p-2 mb-2 border rounded"
+                  placeholder="Name"
+                />
+                <input
+                  type="text"
+                  name="address"
+                  value={editForm.address}
+                  onChange={handleEditChange}
+                  className="w-full p-2 mb-2 border rounded"
+                  placeholder="Address"
+                />
+                <input
+                  type="text"
+                  name="contact"
+                  value={editForm.contact}
+                  onChange={handleEditChange}
+                  className="w-full p-2 mb-2 border rounded"
+                  placeholder="Contact"
+                />
+                <input
+                  type="text"
+                  name="area"
+                  value={editForm.area}
+                  onChange={handleEditChange}
+                  className="w-full p-2 mb-2 border rounded"
+                  placeholder="Area"
+                />
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="isEmergency"
+                    checked={editForm.isEmergency}
+                    onChange={handleEditChange}
+                  />
+                  Emergency?
+                </label>
+                <button onClick={handleEditSubmit} className="bg-green-500 text-white mt-2 p-2 rounded">
+                  Save
+                </button>
+              </div>
+            ) : (
+              <>
+                <h2 className="text-lg font-bold">{pharmacy.name}</h2>
+                <p>Address: {pharmacy.address}</p>
+                <p>Contact: {pharmacy.contact}</p>
+                <p>Emergency: {pharmacy.isEmergency ? "Yes" : "No"}</p>
+                <p>Area: {pharmacy.area}</p>
+                <button onClick={() => handleEditClick(pharmacy)} className="mt-4 bg-blue-500 text-white p-2 rounded">
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleIndividualDelete(pharmacy._id)}
+                  className="mt-2 bg-red-500 text-white p-2 rounded"
+                >
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+
       <div className="mt-8 flex justify-end">
         <button
           onClick={handleDeleteAll}
-          className="bg-red-500 text-white py-2 px-6 rounded-md shadow hover:bg-red-600 focus:ring-2 focus:ring-red-300 transition"
+          className="bg-red-500 text-white py-2 px-6 rounded"
+          disabled={selectedPharmacies.length === 0}
         >
-          Delete All
+          Delete Selected
         </button>
       </div>
 
-      {/* Confirmation Prompt */}
       {showPrompt && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <p className="mb-4 text-lg font-semibold">Are you sure you want to delete the selected pharmacies?</p>
-            <div className="flex justify-around gap-4">
-              <button
-                onClick={confirmDelete}
-                className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:ring-2 focus:ring-red-300 transition"
-              >
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded text-center">
+            <p>Are you sure you want to delete the selected pharmacies?</p>
+            <div className="mt-4 flex justify-around">
+              <button onClick={confirmDelete} className="bg-red-500 text-white px-4 py-2 rounded">
                 Confirm
               </button>
-              <button
-                onClick={cancelDelete}
-                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 transition"
-              >
+              <button onClick={cancelDelete} className="bg-blue-500 text-white px-4 py-2 rounded">
                 Cancel
               </button>
             </div>
@@ -192,3 +313,6 @@ const ManagePharmacy = () => {
 };
 
 export default ManagePharmacy;
+
+
+
